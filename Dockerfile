@@ -1,9 +1,20 @@
-FROM sysdiglabs/cloud-connector:0.16.34 as connector
-RUN echo "test"
+# ベースイメージ
+FROM python:3 
 
-FROM bash:5.1.0
-RUN mkdir /tmp/cloud-connector
-RUN mkdir /tmp/guardduty
-COPY --from=connector /cloud-connector /tmp/cloud-connector
-COPY --from=connector /rules/aws/guardduty /tmp/guardduty
+# メタ情報の追加
+LABEL version="1.0" 
+LABEL description="Python開発環境"  
 
+# 環境変数の設定
+ENV VAR Hello-World
+RUN echo ${VAR}  
+
+# 作業ディレクトリの指定
+WORKDIR /usr/src/app  
+
+# アプリのインストール
+COPY requirements.txt . 
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 起動時の処理実行
+CMD ["echo","Hello-World"]
